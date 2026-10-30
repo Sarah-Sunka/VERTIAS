@@ -1,0 +1,4 @@
+_stitch_extract/
+_test/
+.env
+.env.*

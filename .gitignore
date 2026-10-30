@@ -1,0 +1,6 @@
+_stitch_extract/
+_test/
+.env
+.env.*
+.vercel/
+node_modules/

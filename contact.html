@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact — Veritas Intelligence</title>
+  <meta name="description" content="Request a briefing from Veritas Intelligence. Tell us the question you are trying to answer and we will reply within one business day.">
+  <meta name="theme-color" content="#08090d">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body class="page-contact">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Veritas Intelligence, home">
+        <img class="brand-mark" src="assets/logo.svg" alt="" width="36" height="36">
+        <span class="brand-text">
+          <span class="brand-name">VERITAS</span>
+          <span class="brand-sub">Intelligence OS</span>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu" data-nav-toggle>
+        <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span></span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <ul class="nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html" aria-current="page">Contact</a></li>
+        </ul>
+        <a class="btn btn-primary btn-sm nav-cta" href="contact.html?topic=briefing">Request a briefing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="page-hero page-hero--simple">
+      <div class="container">
+        <div class="reveal contact-intro">
+          <p class="eyebrow"><span class="pulse" aria-hidden="true"></span> Contact</p>
+          <h1>Request a briefing.</h1>
+          <p class="lede">Tell us the question you are trying to answer. A member of our team will reply within one business day.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact-section">
+      <div class="container contact-grid">
+        <form class="form-panel reveal" id="contact-form" novalidate>
+          <h2>Tell us about your question</h2>
+          <p class="form-intro">Fields marked “required” help us route your message. Your details are sent only when you press Send message, and are used only to reply to you.</p>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="name">Full name <span class="optional">(required)</span></label>
+              <input id="name" name="name" type="text" autocomplete="name" required aria-describedby="name-error" placeholder="Alex Morgan">
+              <p class="field-error" id="name-error" hidden></p>
+            </div>
+
+            <div class="field">
+              <label for="email">Work email <span class="optional">(required)</span></label>
+              <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="email-error" placeholder="alex@organization.com">
+              <p class="field-error" id="email-error" hidden></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="organization">Organization <span class="optional">(optional)</span></label>
+            <input id="organization" name="organization" type="text" autocomplete="organization" placeholder="Organization or team">
+          </div>
+
+          <div class="field">
+            <label for="topic">Topic <span class="optional">(required)</span></label>
+            <select id="topic" name="topic" required aria-describedby="topic-error">
+              <option value="" selected>Select a topic</option>
+              <option value="briefing">Request a briefing</option>
+              <option value="partnership">Partnership</option>
+              <option value="press">Press enquiry</option>
+              <option value="security">Security disclosure</option>
+              <option value="other">Something else</option>
+            </select>
+            <p class="field-error" id="topic-error" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="message">How can we help? <span class="optional">(required)</span></label>
+            <textarea id="message" name="message" rows="6" required aria-describedby="message-hint message-error" placeholder="Describe the claim, decision, or investigation you are working on. A short paragraph is enough."></textarea>
+            <p class="field-hint" id="message-hint">Include any deadline or source material you already have. At least 20 characters.</p>
+            <p class="field-error" id="message-error" hidden></p>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">
+              <span id="submit-label">Send message</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            </button>
+            <p class="form-note">We reply within one business day. Your details are used only to respond to this enquiry.</p>
+          </div>
+
+          <div class="form-result" id="form-result" hidden>
+            <h2 id="result-heading" tabindex="-1">
+              <span class="result-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+              <span id="result-title">Your message is ready.</span>
+            </h2>
+            <p id="result-draft-copy">We prepared an email to <strong id="result-email">sarahfaisal2118@gmail.com</strong>. Open your email app to send it, or copy the message and paste it into any mail service.</p>
+            <p id="result-success-copy" hidden>Thank you, <strong id="result-name"></strong>. Your message has been sent. We will reply within one business day.</p>
+            <div id="draft-section">
+              <label class="draft-label" for="draft-preview">Message preview</label>
+              <textarea class="draft-preview" id="draft-preview" rows="9" readonly></textarea>
+              <div class="btn-row">
+                <a class="btn btn-primary" id="mailto-link" href="mailto:sarahfaisal2118@gmail.com">
+                  Open email app
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+                </a>
+                <button class="btn btn-ghost" id="copy-message" type="button">Copy message</button>
+              </div>
+              <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+            </div>
+            <div class="btn-row" id="result-actions" hidden>
+              <button class="btn btn-ghost" id="send-another" type="button">Send another message</button>
+            </div>
+          </div>
+
+          <div class="form-error" id="form-error" tabindex="-1" role="alert" hidden>
+            <p><strong>We couldn't send your message.</strong> Please check your connection and try again.</p>
+            <p>If it keeps happening, email us directly at <a href="mailto:sarahfaisal2118@gmail.com" data-contact-email>sarahfaisal2118@gmail.com</a>.</p>
+          </div>
+
+          <input type="checkbox" name="botcheck" id="botcheck" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+          <noscript>
+            <p class="noscript-note">JavaScript is turned off, so this form cannot be submitted. Please email us directly at <a href="mailto:sarahfaisal2118@gmail.com" data-contact-email>sarahfaisal2118@gmail.com</a>.</p>
+          </noscript>
+        </form>
+
+        <aside class="contact-aside">
+          <div class="info-card reveal">
+            <h2>Prefer email?</h2>
+            <p>Write to us directly. We read every message and reply within one business day.</p>
+            <a class="email-link" href="mailto:sarahfaisal2118@gmail.com" data-contact-email>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+              sarahfaisal2118@gmail.com
+            </a>
+          </div>
+
+          <div class="info-card reveal">
+            <h2>What happens next</h2>
+            <ol class="next-list">
+              <li>We review your question and confirm the right specialist.</li>
+              <li>We suggest a 30-minute briefing at a time that works for you.</li>
+              <li>You leave with a scoped pilot plan and a clear next step.</li>
+            </ol>
+          </div>
+
+          <div class="info-card reveal">
+            <h2>Security disclosure</h2>
+            <p>Found a vulnerability? Choose “Security disclosure” in the form. We will reply with a secure transfer option before you share any details.</p>
+            <span class="status-ok">Secure intake available</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="index.html" aria-label="Veritas Intelligence, home">
+          <img class="brand-mark" src="assets/logo.svg" alt="" width="36" height="36">
+          <span class="brand-text">
+            <span class="brand-name">VERITAS</span>
+            <span class="brand-sub">Intelligence OS</span>
+          </span>
+        </a>
+        <p>Decision-grade evidence for people whose conclusions carry consequences. Every claim sourced, scored, and open to challenge.</p>
+        <span class="status-ok">Core online</span>
+      </div>
+
+      <nav aria-label="Platform">
+        <h2 class="footer-title">Platform</h2>
+        <ul class="footer-links">
+          <li><a href="index.html#capabilities">Capabilities</a></li>
+          <li><a href="index.html#how-it-works">How it works</a></li>
+          <li><a href="about.html#security">Security</a></li>
+          <li><a href="about.html#principles">Our principles</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Contact">
+        <h2 class="footer-title">Contact</h2>
+        <ul class="footer-links">
+          <li><a href="contact.html">Request a briefing</a></li>
+          <li><a href="contact.html?topic=security">Security disclosure</a></li>
+          <li><a href="mailto:sarahfaisal2118@gmail.com" data-contact-email>sarahfaisal2118@gmail.com</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>&copy; <span data-year>2026</span> Veritas Intelligence. All rights reserved.</p>
+      <p class="mono-label">Designed for clarity. Built for scrutiny.</p>
+    </div>
+  </footer>
+
+  <script src="assets/main.js" defer></script>
+</body>
+</html>
