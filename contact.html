@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contact — Veritas Intelligence</title>
-  <meta name="description" content="Request a briefing from Veritas Intelligence. Tell us the question you are trying to answer and we will reply within one business day.">
+  <meta name="description" content="Get an instant AI briefing from Veritas Intelligence. Type a topic and read a concise briefing with key facts, findings, and sources — no email required.">
   <meta name="theme-color" content="#08090d">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,10 +45,89 @@
     <section class="page-hero page-hero--simple">
       <div class="container">
         <div class="reveal contact-intro">
-          <p class="eyebrow"><span class="pulse" aria-hidden="true"></span> Contact</p>
+          <p class="eyebrow"><span class="pulse" aria-hidden="true"></span> Briefing</p>
           <h1>Request a briefing.</h1>
-          <p class="lede">Tell us the question you are trying to answer. A member of our team will reply within one business day.</p>
+          <p class="lede">Type a topic below and get a concise AI briefing right on this page — key facts, findings, and sources where available. No email needed. Prefer a human? The message form further down reaches our team directly.</p>
         </div>
+      </div>
+    </section>
+
+    <section class="section section--bordered investigation-section" id="briefing">
+      <div class="container investigation-grid">
+        <div class="investigation-intro reveal">
+          <p class="eyebrow"><span class="pulse" aria-hidden="true"></span> Instant briefing</p>
+          <h2>An AI briefing, ready in seconds.</h2>
+          <p class="lede">The briefing agent reads your topic and returns a short, structured brief on this page — faster and lighter than a full multi-agent investigation.</p>
+
+          <ol class="investigation-points">
+            <li>
+              <span class="mono-label">01 / Ask</span>
+              <p>Type a topic or question. One focused sentence is enough.</p>
+            </li>
+            <li>
+              <span class="mono-label">02 / Generate</span>
+              <p>The briefing agent compiles key facts, important findings, and sources where available.</p>
+            </li>
+            <li>
+              <span class="mono-label">03 / Read</span>
+              <p>The briefing appears right here. Nothing is emailed or published.</p>
+            </li>
+          </ol>
+
+          <p class="investigation-meta"><span class="status-ok">Server-side relay</span><span>No email required</span></p>
+        </div>
+
+        <form class="form-panel investigation-panel reveal" id="briefing-form" novalidate>
+          <div class="investigation-panel-head">
+            <h3>Briefing console</h3>
+            <span class="chip chip-live"><span class="dot" aria-hidden="true"></span> Agent ready</span>
+          </div>
+          <p class="form-intro">Enter the topic you want briefed. A specific question returns a sharper briefing.</p>
+
+          <div class="field">
+            <label for="briefing-topic">Briefing topic <span class="optional">(required)</span></label>
+            <textarea id="briefing-topic" name="topic" rows="4" maxlength="2000" required aria-describedby="briefing-hint briefing-error" placeholder="Example: Summarize the current evidence on deepfake detection accuracy in voice biometrics."></textarea>
+            <p class="field-hint" id="briefing-hint">10–2,000 characters. Do not include passwords, API keys, or personal data you are not authorized to share.</p>
+            <p class="field-error" id="briefing-error" hidden></p>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" id="get-briefing" type="submit">
+              <span id="briefing-submit-label">Get Briefing</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            </button>
+            <p class="form-note">The request is relayed privately. The webhook URL is never sent to your browser.</p>
+          </div>
+
+          <div class="investigation-loading" id="briefing-loading" role="status" aria-live="polite" hidden>
+            <span class="spinner" aria-hidden="true"></span>
+            <div>
+              <strong>Your briefing is being generated…</strong>
+              <p>This can take up to a minute. Keep this page open.</p>
+            </div>
+          </div>
+
+          <div class="form-error" id="briefing-request-error" tabindex="-1" role="alert" hidden>
+            <p><strong>The briefing did not complete.</strong> <span id="briefing-request-message"></span></p>
+            <p>You can try again with a simpler topic.</p>
+          </div>
+
+          <div class="investigation-result" id="briefing-result" hidden>
+            <div class="investigation-result-head">
+              <p class="eyebrow eyebrow--plain">Briefing received</p>
+              <span class="mono-label" id="briefing-timestamp"></span>
+            </div>
+            <h3 id="briefing-result-heading" tabindex="-1">Your briefing</h3>
+            <div class="report-body" id="briefing-report" tabindex="0"></div>
+            <div class="btn-row">
+              <button class="btn btn-ghost" id="new-briefing" type="button">New briefing</button>
+            </div>
+          </div>
+
+          <noscript>
+            <p class="noscript-note">JavaScript is turned off, so the briefing console cannot run. Please use the message form below instead.</p>
+          </noscript>
+        </form>
       </div>
     </section>
 

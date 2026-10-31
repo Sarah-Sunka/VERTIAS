@@ -763,4 +763,233 @@
       }
     });
   }
+
+  /* ---------- Briefing console ---------- */
+
+  var briefingForm = document.getElementById("briefing-form");
+
+  if (briefingForm) {
+    var briefingTopic = document.getElementById("briefing-topic");
+    var briefingError = document.getElementById("briefing-error");
+    var briefingRequestError = document.getElementById("briefing-request-error");
+    var briefingRequestMessage = document.getElementById("briefing-request-message");
+    var briefingLoading = document.getElementById("briefing-loading");
+    var briefingResult = document.getElementById("briefing-result");
+    var briefingReport = document.getElementById("briefing-report");
+    var briefingResultHeading = document.getElementById("briefing-result-heading");
+    var briefingTimestamp = document.getElementById("briefing-timestamp");
+    var briefingButton = document.getElementById("get-briefing");
+    var briefingButtonLabel = document.getElementById("briefing-submit-label");
+    var newBriefingButton = document.getElementById("new-briefing");
+    var briefingSending = false;
+    var MIN_TOPIC_LENGTH = 10;
+    var MAX_TOPIC_LENGTH = 2000;
+
+    var setBriefingError = function (message) {
+      if (!briefingError) {
+        return;
+      }
+      briefingError.hidden = !message;
+      briefingError.textContent = message || "";
+      if (message) {
+        briefingTopic.setAttribute("aria-invalid", "true");
+      } else {
+        briefingTopic.removeAttribute("aria-invalid");
+      }
+    };
+
+    var clearBriefingRequestError = function () {
+      if (briefingRequestError) {
+        briefingRequestError.hidden = true;
+      }
+    };
+
+    var showBriefingRequestError = function (message) {
+      if (!briefingRequestError) {
+        return;
+      }
+      if (briefingRequestMessage) {
+        briefingRequestMessage.textContent = message;
+      }
+      briefingRequestError.hidden = false;
+      briefingRequestError.focus({ preventScroll: true });
+      briefingRequestError.scrollIntoView({
+        behavior: reducedMotion ? "auto" : "smooth",
+        block: "nearest"
+      });
+    };
+
+    var setBriefingSending = function (sending) {
+      briefingSending = sending;
+      if (briefingButton) {
+        briefingButton.disabled = sending;
+        briefingButton.setAttribute("aria-busy", sending ? "true" : "false");
+      }
+      if (briefingButtonLabel) {
+        briefingButtonLabel.textContent = sending ? "Generating…" : "Get Briefing";
+      }
+      briefingForm.setAttribute("aria-busy", sending ? "true" : "false");
+      if (briefingLoading) {
+        briefingLoading.hidden = !sending;
+      }
+    };
+
+    var showBriefingResult = function (briefing, receivedAt) {
+      if (!briefingResult) {
+        return;
+      }
+      if (briefingReport) {
+        briefingReport.textContent = briefing;
+      }
+      if (briefingTimestamp) {
+        var date = receivedAt ? new Date(receivedAt) : new Date();
+        briefingTimestamp.textContent = isNaN(date.getTime())
+          ? ""
+          : "Received " + date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      }
+      briefingResult.hidden = false;
+      if (briefingResultHeading) {
+        briefingResultHeading.focus({ preventScroll: true });
+      }
+      briefingResult.scrollIntoView({
+        behavior: reducedMotion ? "auto" : "smooth",
+        block: "nearest"
+      });
+    };
+
+    briefingTopic.addEventListener("input", function () {
+      if (briefingTopic.getAttribute("aria-invalid") === "true") {
+        setBriefingError("");
+      }
+      clearBriefingRequestError();
+    });
+
+    if (newBriefingButton) {
+      newBriefingButton.addEventListener("click", function () {
+        briefingForm.reset();
+        setBriefingError("");
+        clearBriefingRequestError();
+        if (briefingResult) {
+          briefingResult.hidden = true;
+        }
+        if (briefingReport) {
+          briefingReport.textContent = "";
+        }
+        if (briefingTimestamp) {
+          briefingTimestamp.textContent = "";
+        }
+        setBriefingSending(false);
+        briefingTopic.focus();
+        briefingForm.scrollIntoView({
+          behavior: reducedMotion ? "auto" : "smooth",
+          block: "start"
+        });
+      });
+    }
+
+    var pageParams = new URLSearchParams(window.location.search);
+    if (pageParams.get("topic") === "briefing") {
+      briefingForm.scrollIntoView({
+        behavior: reducedMotion ? "auto" : "smooth",
+        block: "start"
+      });
+      briefingTopic.focus({ preventScroll: true });
+    }
+
+    briefingForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      if (briefingSending) {
+        return;
+      }
+
+      clearBriefingRequestError();
+      var topic = briefingTopic.value.trim();
+
+      if (topic.length < MIN_TOPIC_LENGTH) {
+        setBriefingError("Please enter at least 10 characters so the agent has enough context.");
+        briefingTopic.focus();
+        return;
+      }
+      if (topic.length > MAX_TOPIC_LENGTH) {
+        setBriefingError("Please shorten your topic to 2,000 characters or fewer.");
+        briefingTopic.focus();
+        return;
+      }
+
+      setBriefingError("");
+
+      if (briefingResult) {
+        briefingResult.hidden = true;
+      }
+
+      setBriefingSending(true);
+
+      var controller = typeof AbortController === "function" ? new AbortController() : null;
+      var timeoutId = controller
+        ? window.setTimeout(function () { controller.abort(); }, 65000)
+        : null;
+
+      try {
+        var response = await fetch("/api/briefing", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify({ topic: topic }),
+          signal: controller ? controller.signal : undefined
+        });
+
+        var data = null;
+        try {
+          data = await response.json();
+        } catch (error) {
+          data = null;
+        }
+
+        if (!response.ok) {
+          var message = data && typeof data.error === "string" ? data.error : "";
+          if (!message) {
+            if (response.status === 504) {
+              message = "The briefing took too long. Try a narrower topic or try again.";
+            } else if (response.status === 503) {
+              message = "The briefing service is not configured yet.";
+            } else if (response.status === 429) {
+              message = "Too many requests. Please wait a moment and try again.";
+            } else {
+              message = "The briefing service is temporarily unavailable. Please try again.";
+            }
+          }
+          var serverError = new Error(message);
+          serverError.fromServer = true;
+          throw serverError;
+        }
+
+        if (!data || data.ok !== true || typeof data.briefing !== "string" || !data.briefing.trim()) {
+          var emptyError = new Error("The briefing finished without readable content. Please try again.");
+          emptyError.fromServer = true;
+          throw emptyError;
+        }
+
+        showBriefingResult(data.briefing, data.receivedAt);
+      } catch (error) {
+        var failureMessage =
+          "We couldn't reach the briefing service. Check your connection and try again.";
+
+        if (error && error.name === "AbortError") {
+          failureMessage = "The briefing took too long. Try a narrower topic or try again.";
+        } else if (error && error.fromServer && error.message) {
+          failureMessage = error.message;
+        }
+
+        showBriefingRequestError(failureMessage);
+      } finally {
+        if (timeoutId) {
+          window.clearTimeout(timeoutId);
+        }
+        setBriefingSending(false);
+      }
+    });
+  }
 })();
