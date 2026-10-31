@@ -103,8 +103,13 @@ function readReportValue(value, depth) {
     }
   }
 
-  if (Object.prototype.hasOwnProperty.call(value, "data")) {
-    return readReportValue(value.data, depth + 1);
+  for (const key of ["data", "choices", "message"]) {
+    if (Object.prototype.hasOwnProperty.call(value, key)) {
+      const found = readReportValue(value[key], depth + 1);
+      if (found) {
+        return found;
+      }
+    }
   }
 
   return "";
